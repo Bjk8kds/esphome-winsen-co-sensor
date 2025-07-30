@@ -1,0 +1,167 @@
+esphome:
+  name: co-monitor
+  friendly_name: Carbon Monoxide Monitor
+  platform: ESP32
+  board: esp32dev
+
+wifi:
+  ssid: "YourWiFiSSID"
+  password: "YourWiFiPassword"
+
+# Enable logging
+logger:
+  level: INFO
+  # Uncomment for debugging
+  # logs:
+  #   ze15_co: DEBUG
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "YourOTAPassword"
+
+# UART configuration for ZE15-CO
+uart:
+  id: uart_ze15
+  tx_pin: GPIO17  # Connect to sensor RX (required for Q&A mode)
+  rx_pin: GPIO16  # Connect to sensor TX
+  baud_rate: 9600
+
+# Method 1: Using as external component from GitHub (when published)
+external_components:
+  - source: github://Bjk8kds/esphome-winsen-co-sensor
+    components: [ ze15_co ]
+
+# Method 2: Using local component (for testing)
+# Copy the ze15_co folder to your esphome config directory
+
+# Sensor configurations
+sensor:
+  ### Example 1: Passive Mode (Default) - Continuous monitoring
+  - platform: ze15_co
+    uart_id: uart_ze15
+    mode: PASSIVE  # Sensor sends data automatically every second
+    co:
+      name: "Carbon Monoxide"
+      id: co_passive
+      filters:
+        - sliding_window_moving_average:
+            window_size: 10
+            send_every: 10
+        # Optional: Add threshold filter for safety
+        - lambda: |-
+            if (x > 50) {
+              ESP_LOGW("co", "High CO level detected: %.1f ppm", x);
+            }
+            return x;
+
+  ### Example 2: Q&A Mode - Power efficient
+  - platform: ze15_co
+    uart_id: uart_ze15
+    mode: QA  # Request data only when needed
+    update_interval: 60s  # Minimum 30s
+    co:
+      name: "Carbon Monoxide QA"
+      id: co_qa
+      accuracy_decimals: 1
+    sensor_fault:
+      name: "CO Sensor Fault"
+      filters:
+        - delayed_on: 10s  # Avoid false positives
+
+# Binary sensor for sensor fault detection
+binary_sensor:
+  - platform: ze15_co
+    uart_id: uart_ze15
+    sensor_fault:
+      name: "CO Sensor Fault"
+      id: sensor_fault_status
+      entity_category: diagnostic
+
+# Optional: Template sensors for CO alarm levels
+  - platform: template
+    name: "CO Level Safe"
+    lambda: |-
+      return id(co_passive).state < 30;
+    device_class: safety
+
+  - platform: template
+    name: "CO Level Warning"
+    lambda: |-
+      return id(co_passive).state >= 30 && id(co_passive).state < 50;
+    device_class: problem
+
+  - platform: template
+    name: "CO Level Danger"
+    lambda: |-
+      return id(co_passive).state >= 50;
+    device_class: safety
+    # Invert logic - true means NOT safe
+    filters:
+      - invert:
+
+# Optional: Text sensor for CO level description
+text_sensor:
+  - platform: template
+    name: "CO Level Status"
+    lambda: |-
+      if (id(sensor_fault_status).state) {
+        return {"Sensor Fault"};
+      } else if (id(co_passive).state < 30) {
+        return {"Normal"};
+      } else if (id(co_passive).state < 50) {
+        return {"Warning"};
+      } else if (id(co_passive).state < 100) {
+        return {"Danger"};
+      } else {
+        return {"Extreme Danger"};
+      }
+    update_interval: 5s
+    icon: "mdi:molecule-co"
+
+# Optional: Switch to toggle between modes (requires restart)
+# switch:
+#   - platform: template
+#     name: "CO Sensor Q&A Mode"
+#     lambda: |-
+#       return id(co_passive).get_mode() == ze15_co::MODE_QA;
+#     turn_on_action:
+#       - logger.log: "Switching to Q&A mode requires restart"
+#     turn_off_action:
+#       - logger.log: "Switching to Passive mode requires restart"
+
+# Optional: Status LED that changes based on CO level
+light:
+  - platform: neopixelbus
+    type: GRB
+    variant: WS2812
+    pin: GPIO2
+    num_leds: 1
+    name: "CO Status LED"
+    id: status_led
+    effects:
+      - lambda:
+          name: CO Level Indicator
+          update_interval: 1s
+          lambda: |-
+            if (id(sensor_fault_status).state) {
+              // Purple for sensor fault
+              it.all() = Color(128, 0, 128);
+            } else if (id(co_passive).state < 30) {
+              // Green for safe
+              it.all() = Color(0, 255, 0);
+            } else if (id(co_passive).state < 50) {
+              // Yellow for warning
+              it.all() = Color(255, 255, 0);
+            } else {
+              // Red for danger
+              it.all() = Color(255, 0, 0);
+            }
+
+# CO Level Reference (ppm):
+# 0-9 ppm: Normal background levels
+# 10-29 ppm: Levels typically found in homes
+# 30-49 ppm: Warning - potential health issues with prolonged exposure
+# 50-99 ppm: Danger - can cause headache, nausea
+# 100+ ppm: Extreme danger - evacuate immediately
