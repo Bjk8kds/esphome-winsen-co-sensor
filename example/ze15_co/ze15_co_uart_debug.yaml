@@ -1,0 +1,91 @@
+esphome:
+  name: co-monitor-debug
+  friendly_name: CO Monitor Debug
+  platform: ESP32
+  board: esp32dev
+
+# Example using UART debug without custom component
+# Useful for testing and understanding the protocol
+
+wifi:
+  ssid: "YourWiFi"
+  password: "YourPassword"
+
+api:
+ota:
+
+logger:
+  level: DEBUG
+
+# Template sensors to store values
+sensor:
+  - platform: template
+    name: "CO Concentration"
+    id: co_sensor
+    unit_of_measurement: 'ppm'
+    accuracy_decimals: 1
+    device_class: carbon_monoxide
+    state_class: measurement
+    icon: "mdi:molecule-co"
+
+binary_sensor:
+  - platform: template
+    name: "CO Sensor Fault"
+    id: sensor_fault
+    device_class: problem
+
+# UART debug for Initiative mode (default)
+uart:
+  - id: uart_ze15
+    rx_pin: GPIO16
+    baud_rate: 9600
+    debug:
+      direction: RX
+      dummy_receiver: true
+      sequence:
+        - lambda: |-
+            // Log hex data
+            UARTDebug::log_hex(direction, bytes, ':');
+            
+            // Check for valid Initiative mode packet
+            if (bytes.size() == 9 && bytes[0] == 0xFF && bytes[1] == 0x04) {
+              // Validate checksum
+              uint8_t sum = 0;
+              for (int i = 1; i < 8; i++) {
+                sum += bytes[i];
+              }
+              uint8_t checksum = (~sum) + 1;
+              
+              if (checksum == bytes[8]) {
+                // Extract sensor fault (bit 7 of high byte)
+                bool fault = (bytes[4] & 0x80) != 0;
+                id(sensor_fault).publish_state(fault);
+                
+                // Calculate CO concentration
+                // CO = ((low 5 bits of high byte) * 256 + low byte) * 0.1
+                uint16_t raw = ((bytes[4] & 0x1F) << 8) | bytes[5];
+                float co_ppm = raw * 0.1;
+                
+                id(co_sensor).publish_state(co_ppm);
+                
+                ESP_LOGI("ze15", "CO: %.1f ppm, Fault: %s", 
+                         co_ppm, fault ? "YES" : "NO");
+              }
+            }
+
+# For Q&A mode debug, add this section:
+# esphome:
+#   on_boot:
+#     - delay: 2s
+#     - uart.write:
+#         id: uart_ze15
+#         data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+# 
+# interval:
+#   - interval: 60s
+#     then:
+#       - uart.write:
+#           id: uart_ze15
+#           data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+#
+# And modify lambda to handle Q&A response (0xFF 0x86)
