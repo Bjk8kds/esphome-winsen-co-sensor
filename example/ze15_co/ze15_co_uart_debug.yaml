@@ -74,18 +74,18 @@ uart:
             }
 
 # For Q&A mode debug, add this section:
-# esphome:
-#   on_boot:
-#     - delay: 2s
-#     - uart.write:
-#         id: uart_ze15
-#         data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
-# 
-# interval:
-#   - interval: 60s
-#     then:
-#       - uart.write:
-#           id: uart_ze15
-#           data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
-#
+esphome:
+  on_boot:
+    - delay: 2s
+    - uart.write:
+        id: uart_ze15
+        data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+
+interval:
+  - interval: 60s
+    then:
+      - uart.write:
+          id: uart_ze15
+          data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+
 # And modify lambda to handle Q&A response (0xFF 0x86)
