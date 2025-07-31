@@ -1,0 +1,81 @@
+esphome:
+  name: ze07-co-monitor
+  friendly_name: ZE07-CO Monitor
+  platform: ESP32
+  board: esp32dev
+
+wifi:
+  ssid: "YourWiFiSSID"
+  password: "YourWiFiPassword"
+
+# Enable logging
+logger:
+  level: INFO
+  # Uncomment for debugging
+  # logs:
+  #   ze07_co: DEBUG
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "YourOTAPassword"
+
+# External component from GitHub
+external_components:
+  - source: github://Bjk8kds/esphome-winsen-co-sensor
+    components: [ ze07_co ]
+
+# UART configuration for ZE07-CO
+uart:
+  id: uart_ze07
+  tx_pin: GPIO17  # Connect to sensor RX (required for Q&A mode)
+  rx_pin: GPIO16  # Connect to sensor TX
+  baud_rate: 9600
+
+# Sensor configurations
+sensor:
+  ### Example 1: Passive Mode (Default) - Continuous monitoring
+  - platform: ze07_co
+    uart_id: uart_ze07
+    mode: PASSIVE  # Sensor sends data automatically every second
+    co:
+      name: "CO Passive Mode"
+      id: co_passive
+      filters:
+        - sliding_window_moving_average:
+            window_size: 10
+            send_every: 10
+
+  ### Example 2: Q&A Mode - Power efficient for battery operation
+  - platform: ze07_co
+    uart_id: uart_ze07
+    mode: QA  # Request data only when needed
+    update_interval: 60s  # Minimum 30s for ZE07-CO
+    co:
+      name: "CO Q&A Mode"
+      id: co_qa
+
+# Optional: Text template sensors for CO level status
+text_sensor:
+  - platform: template
+    name: "CO Level Status"
+    lambda: |-
+      if (id(co_passive).state < 30) {
+        return {"Normal"};
+      } else if (id(co_passive).state < 50) {
+        return {"Warning"};
+      } else if (id(co_passive).state < 100) {
+        return {"Danger"};
+      } else {
+        return {"Critical"};
+      }
+    update_interval: 5s
+
+# Optional: Binary sensor for CO alert
+binary_sensor:
+  - platform: template
+    name: "CO Alert"
+    lambda: |-
+      return id(co_passive).state > 50;
+    device_class: gas
