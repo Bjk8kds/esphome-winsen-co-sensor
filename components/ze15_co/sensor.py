@@ -26,7 +26,7 @@ def validate_update_interval(config):
         if interval_ms < 5000:  # 5 seconds minimum
             interval_seconds = interval_ms / 1000
             raise cv.Invalid(
-                f"update_interval must be at least 5s. "
+                f"update_interval must be at least 5s for Q&A mode. "
                 f"You set {interval_seconds}s. "
                 "For real-time monitoring, remove update_interval to use Initiative mode."
             )
