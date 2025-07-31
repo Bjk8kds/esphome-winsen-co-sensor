@@ -43,7 +43,7 @@ sensor:
   # With update_interval = Q&A mode
   - platform: ze15_co
     uart_id: uart_ze15
-    update_interval: 60s  # This enables Q&A mode
+    update_interval: 60s  # This enables Q&A mode, any value ≥ 5s
     co:
       name: "CO Q&A Mode"
       id: co_qa
@@ -76,16 +76,16 @@ text_sensor:
     update_interval: 5s
 
 # Configuration comparison:
-# 
+
 # Real-time monitoring (Initiative mode):
-#   sensor:
-#     - platform: ze15_co
-#       co:
-#         name: "CO Level"
-#
+  sensor:
+    - platform: ze15_co
+      co:
+        name: "CO Level"
+
 # Periodic monitoring (Q&A mode):
-#   sensor:
-#     - platform: ze15_co
-#       update_interval: 2min  # Any value ≥ 5s
-#       co:
-#         name: "CO Level"
+  sensor:
+    - platform: ze15_co
+      update_interval: 2min  # Any value ≥ 5s
+      co:
+        name: "CO Level"
