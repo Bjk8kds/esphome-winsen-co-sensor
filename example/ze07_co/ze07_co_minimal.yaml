@@ -1,0 +1,39 @@
+# Minimal configuration for ZE07-CO sensor
+esphome:
+  name: ze07-co-sensor
+  platform: ESP32
+  board: esp32dev
+
+# Change these to your network
+wifi:
+  ssid: "YourWiFi"
+  password: "YourPassword"
+
+api:
+ota:
+
+# External component from GitHub
+external_components:
+  - source: github://Bjk8kds/esphome-winsen-co-sensor
+    components: [ ze07_co ]
+
+# UART pins - adjust to your wiring
+uart:
+  rx_pin: GPIO16  # Connect to sensor TX
+  tx_pin: GPIO17  # Connect to sensor RX (optional for Passive mode)
+  baud_rate: 9600
+
+# CO sensor - minimal config (Passive mode)
+sensor:
+  - platform: ze07_co
+    co:
+      name: "CO Level"
+# Note: This uses Initiative mode (real-time data every second)
+
+# To use Q&A mode, add mode: QA
+sensor:
+  - platform: ze07_co
+    mode: QA
+    update_interval: 60s  # Minimum 30s for ZE07-CO
+    co:
+        name: "CO Level"
