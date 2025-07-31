@@ -3,7 +3,9 @@
 [![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue.svg)](https://esphome.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-ESPHome custom components for Winsen electrochemical carbon monoxide (CO) sensors.
+ESPHome custom/external components for Winsen electrochemical carbon monoxide (CO) sensors.
+
+> 🟢 **NB**: Example of using uart debug and commands directly in yaml (without this custom component), please check [example](example/).
 
 ## 📦 Supported Sensors
 
@@ -214,8 +216,8 @@ logger:
 ## 📚 Documentation
 
 - [Detailed Examples](example/)
-- [ZE15-CO Datasheet](https://www.winsen-sensor.com/sensors/co-sensor/ze15-co.html)
-- [ESPHome UART](https://esphome.io/components/uart.html)
+- [ZE15-CO Datasheet (PDF)](https://www.winsen-sensor.com/d/files/ze15-co-module-manual-v1_1.pdf)
+- [Winsen Official Website](https://www.winsen-sensor.com/)
 
 ## 🤝 Contributing
 
@@ -227,7 +229,7 @@ Contributions welcome! Especially for:
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -235,6 +237,11 @@ MIT License - see [LICENSE](LICENSE) file
 - Winsen Electronics for sensor documentation
 - Community contributors
 
+## 📞 Support
+
+- 📖 [ESPHome Documentation](https://esphome.io/)
+- 💬 [Home Assistant Community](https://community.home-assistant.io/)
+- 🐛 [Issue Tracker](https://github.com/Bjk8kds/esphome-winsen-co-sensor)
 ---
 
 Made with ❤️ for the ESPHome community
