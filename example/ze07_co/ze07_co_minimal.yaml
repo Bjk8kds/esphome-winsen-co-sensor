@@ -34,6 +34,5 @@ sensor:
 sensor:
   - platform: ze07_co
     mode: QA
-    update_interval: 60s  # Minimum 30s for ZE07-CO
     co:
         name: "CO Level"
