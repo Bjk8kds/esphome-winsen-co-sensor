@@ -12,6 +12,11 @@ wifi:
 api:
 ota:
 
+# External component from GitHub
+external_components:
+  - source: github://Bjk8kds/esphome-winsen-co-sensor
+    components: [ ze15_co ]
+
 # UART pins - adjust to your wiring
 uart:
   rx_pin: GPIO16  # Connect to sensor TX
@@ -23,11 +28,11 @@ sensor:
   - platform: ze15_co
     co:
       name: "CO Level"
-
 # Note: This uses Initiative mode (real-time data every second)
+
 # To use Q&A mode, add update_interval:
-#   sensor:
-#     - platform: ze15_co
-#       update_interval: 60s
-#       co:
-#         name: "CO Level"
+  sensor:
+    - platform: ze15_co
+      update_interval: 60s  # Any value ≥ 5s
+      co:
+        name: "CO Level"
