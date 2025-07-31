@@ -1,0 +1,76 @@
+esphome:
+  name: ze07-co-qa-monitor
+  friendly_name: ZE07-CO Q&A Monitor
+  platform: ESP32
+  board: esp32dev
+  on_boot:
+    # Switch to Q&A mode
+    - uart.write:
+        id: uart_ze07
+        data: [0xFF, 0x01, 0x78, 0x41, 0x00, 0x00, 0x00, 0x00, 0x46]
+    - delay: 500ms
+    # Enter dormant mode, stop internal operations
+    - uart.write:
+        id: uart_ze07
+        data: [0xFF, 0x01, 0xA7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x57]
+
+interval:
+  - interval: 60s
+    then:
+      # Exit dormant mode, start internal operations
+      - uart.write:
+          id: uart_ze07
+          data: [0xFF, 0x01, 0xA7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58]
+      - delay: 30s  # Wait 30s for warm-up (ZE07-CO requirement)
+      # Send read data command
+      - uart.write:
+          id: uart_ze07
+          data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
+      - delay: 2s
+      # Enter dormant mode again
+      - uart.write:
+          id: uart_ze07
+          data: [0xFF, 0x01, 0xA7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x57]
+
+sensor:
+  - platform: template
+    name: "CO Level"
+    id: co_sensor
+    unit_of_measurement: 'ppm'
+    accuracy_decimals: 1
+    device_class: carbon_monoxide
+    state_class: measurement
+    icon: "mdi:molecule-co"
+    lambda: "return {};"
+
+uart:
+  - id: uart_ze07
+    rx_pin: GPIO16
+    tx_pin: GPIO17
+    baud_rate: 9600
+    debug:
+      direction: RX
+      dummy_receiver: true
+      sequence:
+        - lambda: |-
+            UARTDebug::log_hex(direction, bytes,':');  // Log hex data
+            
+            // Check for Q&A response packet
+            if (bytes.size() == 9 && bytes[0] == 0xFF && bytes[1] == 0x86) {
+              // Validate checksum
+              uint8_t sum = 0;
+              for (int i = 1; i < 8; i++) {
+                sum += bytes[i];
+              }
+              uint8_t checksum = (~sum) + 1;
+              
+              if (checksum == bytes[8]) {
+                // Extract CO concentration from Q&A response
+                // In Q&A mode: CO at bytes 2 (high) and 3 (low)
+                uint16_t raw = (bytes[2] << 8) | bytes[3];
+                float co_ppm = raw * 0.1;
+                
+                // Update sensor
+                id(co_sensor).publish_state(co_ppm);
+              }
+            }
