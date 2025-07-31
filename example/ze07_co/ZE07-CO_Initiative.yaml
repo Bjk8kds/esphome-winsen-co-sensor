@@ -1,0 +1,59 @@
+esphome:
+  name: ze07-co-monitor
+  friendly_name: ZE07-CO Monitor
+  platform: ESP32
+  board: esp32dev
+  on_boot:
+    # Ensure sensor is in Initiative/Passive mode
+    - uart.write:
+        id: uart_ze07
+        data: [0xFF, 0x01, 0x78, 0x40, 0x00, 0x00, 0x00, 0x00, 0x47]
+    - delay: 500ms
+    # Exit dormant mode for continuous reading
+    - uart.write:
+        id: uart_ze07
+        data: [0xFF, 0x01, 0xA7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58]
+
+sensor:
+  # ZE07-CO
+  - platform: template
+    name: "CO Level"
+    id: co_sensor
+    unit_of_measurement: 'ppm'
+    accuracy_decimals: 1
+    device_class: carbon_monoxide
+    state_class: measurement
+    icon: "mdi:molecule-co"
+    lambda: "return {};"
+
+uart:
+  - id: uart_ze07
+    rx_pin: GPIO16
+    tx_pin: GPIO17
+    baud_rate: 9600
+    debug:
+      direction: RX
+      dummy_receiver: true
+      sequence:
+        - lambda: |-
+            UARTDebug::log_hex(direction, bytes,':');  // Log hex data
+            
+            // Check for Initiative mode packet
+            if (bytes.size() == 9 && bytes[0] == 0xFF && bytes[1] == 0x04) {
+              // Validate checksum
+              uint8_t sum = 0;
+              for (int i = 1; i < 8; i++) {
+                sum += bytes[i];
+              }
+              uint8_t checksum = (~sum) + 1;
+              
+              if (checksum == bytes[8]) {
+                // Extract CO concentration
+                // CO = (High Byte * 256 + Low Byte) * 0.1
+                uint16_t raw = (bytes[4] << 8) | bytes[5];
+                float co_ppm = raw * 0.1;
+                
+                // Update sensor
+                id(co_sensor).publish_state(co_ppm);
+              }
+            }
