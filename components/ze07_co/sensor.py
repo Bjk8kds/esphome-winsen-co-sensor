@@ -29,13 +29,13 @@ def validate_update_interval(config):
         interval = config[CONF_UPDATE_INTERVAL]
         # Get milliseconds value from TimePeriodMilliseconds object
         interval_ms = interval.total_milliseconds
-        if interval_ms < 30000:  # 30 seconds in milliseconds
+        if interval_ms < 45000:  # 45 seconds in milliseconds
             # Convert back to seconds for display
             interval_seconds = interval_ms / 1000
             raise cv.Invalid(
-                f"update_interval must be at least 30s for Q&A mode. "
+                f"update_interval must be at least 45s for Q&A mode. "
                 f"You set {interval_seconds}s. "
-                "The sensor needs time to warm up and take accurate readings."
+                "The sensor needs 30s wake time + reading time + 2s before sleep."
             )
     return config
 
@@ -75,7 +75,7 @@ async def to_code(config):
             interval = config[CONF_UPDATE_INTERVAL]
         else:
             interval = 60000  # Default 60 seconds in milliseconds
-        interval_ms = max(30000, int(interval.total_milliseconds if hasattr(interval, 'total_milliseconds') else interval))
+        interval_ms = max(45000, int(interval.total_milliseconds if hasattr(interval, 'total_milliseconds') else interval))
         cg.add(var.set_update_interval(interval_ms))
     # For PASSIVE mode, update_interval is ignored (sensor sends data every second)
         
