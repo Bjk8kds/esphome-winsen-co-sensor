@@ -51,7 +51,7 @@ sensor:
   - platform: ze07_co
     uart_id: uart_ze07
     mode: QA  # Request data only when needed
-    update_interval: 60s  # Minimum 30s for ZE07-CO
+    update_interval: 60s  # Minimum 45s for ZE07-CO
     co:
       name: "CO Q&A Mode"
       id: co_qa
@@ -79,3 +79,9 @@ binary_sensor:
     lambda: |-
       return id(co_passive).state > 50;
     device_class: gas
+
+# Optional: Status LED
+light:
+  - platform: status_led
+    name: "Status LED"
+    pin: GPIO2
