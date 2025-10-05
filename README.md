@@ -1,7 +1,7 @@
 # ESPHome Winsen CO Sensors
 
 [![ESPHome](https://img.shields.io/badge/ESPHome-Compatible-blue.svg)](https://esphome.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-darkred.svg)](https://opensource.org/licenses/MIT)
 
 ESPHome custom/external components for Winsen electrochemical carbon monoxide (CO) sensors.
 
