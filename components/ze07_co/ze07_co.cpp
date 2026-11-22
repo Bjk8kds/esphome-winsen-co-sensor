@@ -192,7 +192,6 @@ void ZE07COSensor::dump_config() {
   ESP_LOGCONFIG(TAG, "  Mode: %s", this->mode_ == MODE_QA ? "Q&A" : "Passive");
   ESP_LOGCONFIG(TAG, "  Update Interval: %u ms", this->update_interval_);
   LOG_SENSOR("  ", "CO", this->co_sensor_);
-  this->check_uart_settings(9600);
 }
 
 float ZE07COSensor::get_setup_priority() const { 
