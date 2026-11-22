@@ -275,7 +275,7 @@ Contributions welcome! Especially for:
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - ESPHome development team
 - Winsen Electronics for sensor documentation
