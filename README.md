@@ -226,16 +226,6 @@ binary_sensor:
     device_class: gas
 ```
 
-## CO Safety (Example)
-
-| CO Level (ppm) | Health Effects | Action Required |
-|----------------|----------------|-----------------|
-| 0-9 | Normal background | None |
-| 10-29 | Typical indoor levels | Monitor |
-| 30-49 | Potential health effects | Increase ventilation |
-| 50-99 | Dangerous | Evacuate & ventilate |
-| 100+ | Life-threatening | Immediate evacuation |
-
 ## Troubleshooting
 
 ### No Data Received
