@@ -223,6 +223,7 @@ binary_sensor:
       return id(co_indoor).state > 50;
     device_class: gas
 ```
+> ⚠️ Per Winsen's manual, these modules must not be used in systems related to human safety. The examples below are for monitoring/automation only and are not a substitute for a certified CO alarm.
 
 ## Troubleshooting
 
