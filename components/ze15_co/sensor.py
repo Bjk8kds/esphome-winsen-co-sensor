@@ -14,6 +14,7 @@ CONF_CO = "co"
 CONF_SENSOR_FAULT = "sensor_fault"
 
 DEPENDENCIES = ["uart"]
+AUTO_LOAD = ["binary_sensor"]
 
 ze15_co_ns = cg.esphome_ns.namespace("ze15_co")
 ZE15COSensor = ze15_co_ns.class_("ZE15COSensor", cg.Component, uart.UARTDevice)
