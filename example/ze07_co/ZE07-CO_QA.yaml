@@ -8,29 +8,14 @@ esphome:
     - uart.write:
         id: uart_ze07
         data: [0xFF, 0x01, 0x78, 0x41, 0x00, 0x00, 0x00, 0x00, 0x46]
-    - delay: 500ms
-    # Enter dormant mode, stop internal operations
-    - uart.write:
-        id: uart_ze07
-        data: [0xFF, 0x01, 0xA7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x57]
 
 interval:
   - interval: 60s
     then:
-      # Exit dormant mode, start internal operations
-      - uart.write:
-          id: uart_ze07
-          data: [0xFF, 0x01, 0xA7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x58]
-      - delay: 30s  # Wait 30s for warm-up (ZE07-CO requirement)
       # Send read data command
       - uart.write:
           id: uart_ze07
           data: [0xFF, 0x01, 0x86, 0x00, 0x00, 0x00, 0x00, 0x00, 0x79]
-      - delay: 2s
-      # Enter dormant mode again
-      - uart.write:
-          id: uart_ze07
-          data: [0xFF, 0x01, 0xA7, 0x01, 0x00, 0x00, 0x00, 0x00, 0x57]
 
 sensor:
   - platform: template
