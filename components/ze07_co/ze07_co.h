@@ -15,9 +15,7 @@ enum ZE07COMode {
 // QA state machine states
 enum QAState {
   QA_IDLE,
-  QA_WAKE_SENT,
-  QA_READ_SENT,
-  QA_WAITING_SLEEP
+  QA_READ_SENT
 };
 
 class ZE07COSensor : public Component, public uart::UARTDevice {
@@ -60,12 +58,10 @@ class ZE07COSensor : public Component, public uart::UARTDevice {
   static const uint8_t GAS_TYPE_CO = 0x04;
   static const uint8_t CMD_RESPONSE = 0x86;
 
-  // Commands (9 bytes) - Same as ZH03B
+  // Commands (9 bytes)
   static const uint8_t CMD_READ_DATA[9];
   static const uint8_t CMD_SET_QA_MODE[9];
   static const uint8_t CMD_SET_PASSIVE_MODE[9];
-  static const uint8_t CMD_DORMANT_ON[9];
-  static const uint8_t CMD_DORMANT_OFF[9];
 
   // Functions
   bool validate_checksum_(const uint8_t *data);
