@@ -155,7 +155,7 @@ sensor:
 | **Initiative/Passive Mode** | ✅ Real-time data | ✅ Real-time data |
 | **Q&A Mode** | ✅ Supported | ✅ Supported |
 | **Sensor Fault Detection** | ✅ Available | ❌ Not available |
-| **Min Q&A Interval** | 5 seconds | 45 seconds |
+| **Min Q&A Interval** | 5 seconds | 5 seconds |
 | **Warm-up Time** | 30 seconds | 3 minutes |
 
 ## Examples
