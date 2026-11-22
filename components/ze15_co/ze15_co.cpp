@@ -189,7 +189,6 @@ void ZE15COSensor::dump_config() {
   }
   LOG_SENSOR("  ", "CO", this->co_sensor_);
   LOG_BINARY_SENSOR("  ", "Sensor Fault", this->sensor_fault_);
-  this->check_uart_settings(9600);
 }
 
 float ZE15COSensor::get_setup_priority() const { 
