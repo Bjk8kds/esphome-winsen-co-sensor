@@ -23,7 +23,6 @@ ESPHome custom/external components for Winsen electrochemical carbon monoxide (C
 - 🏠 **Home Assistant** integration ready
 - 📡 **UART communication** at 9600 baud
 - 🎯 **High precision**: 0.1 ppm resolution
-- 🔋 **Power efficient Q&A mode** with dormant support (ZE07-CO)
 
 ## Installation
 
@@ -107,7 +106,7 @@ sensor:
 
 ### ZE07-CO
 
-ZE07-CO requires **explicit mode selection** and supports power-saving dormant mode:
+ZE07-CO requires **explicit mode selection**:
 
 #### Passive Mode (Default)
 ```yaml
@@ -118,11 +117,11 @@ sensor:
       name: "CO Level"
 ```
 
-#### Q&A Mode with Dormant
+#### Q&A Mode
 ```yaml
 sensor:
   - platform: ze07_co
-    mode: QA  # Power efficient mode
+    mode: QA
     update_interval: 60s  # Minimum 45s, default 60s
     co:
       name: "CO Level"
@@ -154,8 +153,7 @@ sensor:
 |---------|---------|---------|
 | **Mode Selection** | Automatic (based on `update_interval`) | Explicit (`mode` parameter) |
 | **Initiative/Passive Mode** | ✅ Real-time data | ✅ Real-time data |
-| **Q&A Mode** | ✅ Simple request/response | ✅ With dormant support |
-| **Dormant Mode** | ❌ Always active | ✅ Power saving between readings |
+| **Q&A Mode** | ✅ Supported | ✅ Supported |
 | **Sensor Fault Detection** | ✅ Available | ❌ Not available |
 | **Min Q&A Interval** | 5 seconds | 45 seconds |
 | **Warm-up Time** | 30 seconds | 3 minutes |
@@ -179,7 +177,7 @@ sensor:
 
 ### Power-Efficient Monitoring
 ```yaml
-# ZE15-CO - Q&A mode (sensor always active)
+# ZE15-CO - Q&A mode
 sensor:
   - platform: ze15_co
     update_interval: 60s
@@ -188,11 +186,11 @@ sensor:
     sensor_fault:
       name: "CO Sensor Status"
 
-# ZE07-CO - Q&A mode with dormant (extends sensor life)
+# ZE07-CO - Q&A mode
 sensor:
   - platform: ze07_co
     mode: QA
-    update_interval: 5min  # Battery friendly
+    update_interval: 60s
     co:
       name: "CO Level"
 ```
