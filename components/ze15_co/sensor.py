@@ -10,6 +10,15 @@ from esphome.const import (
     ENTITY_CATEGORY_DIAGNOSTIC,
 )
 
+FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
+    "ze15_co",
+    baud_rate=9600,
+    require_rx=True,
+    data_bits=8,
+    parity="NONE",
+    stop_bits=1,
+)
+
 CONF_CO = "co"
 CONF_SENSOR_FAULT = "sensor_fault"
 
