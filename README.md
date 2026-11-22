@@ -7,7 +7,7 @@ ESPHome custom/external components for Winsen electrochemical carbon monoxide (C
 
 > 🟢 **NB**: Examples of using uart debug and commands directly in yaml (without custom components) are available in the [example](example/) folder.
 
-## 📦 Supported Sensors
+## Supported Sensors
 
 | Sensor | Range | Status | Component |
 |--------|-------|--------|-----------|
@@ -25,7 +25,7 @@ ESPHome custom/external components for Winsen electrochemical carbon monoxide (C
 - 🎯 **High precision**: 0.1 ppm resolution
 - 🔋 **Power efficient Q&A mode** with dormant support (ZE07-CO)
 
-## 📦 Installation
+## Installation
 
 ### External Component
 
@@ -40,7 +40,7 @@ external_components:
 1. Copy the `components/ze15_co` or `components/ze07_co` folder to your ESPHome configuration directory
 2. Use the component in your YAML configuration
 
-## 🔌 Wiring
+## Wiring
 
 ### ZE15-CO
 
@@ -128,7 +128,7 @@ sensor:
       name: "CO Level"
 ```
 
-## 📊 Configuration Parameters
+## Configuration Parameters
 
 ### ZE15-CO
 
@@ -148,7 +148,7 @@ sensor:
 | `co` | sensor | - | CO concentration sensor |
 | `uart_id` | id | - | UART bus ID |
 
-## 🔄 Operating Modes Comparison
+## Operating Modes Comparison
 
 | Feature | ZE15-CO | ZE07-CO |
 |---------|---------|---------|
@@ -160,7 +160,7 @@ sensor:
 | **Min Q&A Interval** | 5 seconds | 45 seconds |
 | **Warm-up Time** | 30 seconds | 3 minutes |
 
-## 💡 Examples
+## Examples
 
 ### Basic Configuration
 ```yaml
@@ -226,7 +226,7 @@ binary_sensor:
     device_class: gas
 ```
 
-## 🏥 CO Safety Reference
+## CO Safety (Example)
 
 | CO Level (ppm) | Health Effects | Action Required |
 |----------------|----------------|-----------------|
@@ -236,7 +236,7 @@ binary_sensor:
 | 50-99 | Dangerous | Evacuate & ventilate |
 | 100+ | Life-threatening | Immediate evacuation |
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### No Data Received
 - Check power supply (5-12V)
@@ -257,21 +257,21 @@ logger:
     ze07_co: VERY_VERBOSE
 ```
 
-## 📚 Documentation
+## Documentation
 
 - [Detailed Examples](example/)
 - [ZE15-CO Datasheet (PDF)](https://www.winsen-sensor.com/d/files/ze15-co-module-manual-v1_1.pdf)
 - [ZE07-CO Datasheet (PDF)](https://www.winsen-sensor.com/d/files/ze07-co-module-1_7.pdf)
 - [Winsen Official Website](https://www.winsen-sensor.com/)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions welcome! Especially for:
 - Additional Winsen CO sensors
 - Performance optimizations
 - Documentation improvements
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
@@ -281,11 +281,11 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - Winsen Electronics for sensor documentation
 - Community contributors
 
-## 📞 Support
+## Support
 
 - 📖 [ESPHome Documentation](https://esphome.io/)
 - 💬 [Home Assistant Community](https://community.home-assistant.io/)
-- 🐛 [Issue Tracker](https://github.com/Bjk8kds/esphome-winsen-co-sensor)
+- 🐛 [Issue Tracker](https://github.com/Bjk8kds/esphome-winsen-co-sensor/issues)
 
 ---
 
