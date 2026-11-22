@@ -122,7 +122,7 @@ sensor:
 sensor:
   - platform: ze07_co
     mode: QA
-    update_interval: 60s  # Minimum 45s, default 60s
+    update_interval: 60s  # Minimum 5s, default 60s
     co:
       name: "CO Level"
 ```
@@ -143,7 +143,7 @@ sensor:
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `mode` | string | `PASSIVE` | Operating mode: `PASSIVE` or `QA` |
-| `update_interval` | time | `60s` | Update interval for Q&A mode (≥45s) |
+| `update_interval` | time | `60s` | Update interval for Q&A mode (≥5s) |
 | `co` | sensor | - | CO concentration sensor |
 | `uart_id` | id | - | UART bus ID |
 
