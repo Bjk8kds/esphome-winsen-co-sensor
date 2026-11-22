@@ -39,7 +39,7 @@ sensor:
             window_size: 10
             send_every: 10
 
-  ### Example 2: Q&A Mode (Power efficient)
+  ### Example 2: Q&A Mode
   # With update_interval = Q&A mode
   - platform: ze15_co
     uart_id: uart_ze15
