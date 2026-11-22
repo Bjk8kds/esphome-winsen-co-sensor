@@ -43,8 +43,7 @@ def validate_update_interval(config):
             interval_seconds = interval_ms / 1000
             raise cv.Invalid(
                 f"update_interval must be at least 5s for Q&A mode. "
-                f"You set {interval_seconds}s. "
-                "The sensor needs 30s wake time + reading time + 2s before sleep."
+                f"You set {interval_seconds}s."
             )
     return config
 
