@@ -9,6 +9,15 @@ from esphome.const import (
     UNIT_PARTS_PER_MILLION,
 )
 
+FINAL_VALIDATE_SCHEMA = uart.final_validate_device_schema(
+    "ze07_co",
+    baud_rate=9600,
+    require_rx=True,
+    data_bits=8,
+    parity="NONE",
+    stop_bits=1,
+)
+
 CONF_CO = "co"
 CONF_MODE = "mode"
 
