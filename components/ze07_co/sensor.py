@@ -29,7 +29,7 @@ def validate_update_interval(config):
         interval = config[CONF_UPDATE_INTERVAL]
         # Get milliseconds value from TimePeriodMilliseconds object
         interval_ms = interval.total_milliseconds
-        if interval_ms < 45000:  # 45 seconds in milliseconds
+        if interval_ms < 5000:  # 5 seconds in milliseconds
             # Convert back to seconds for display
             interval_seconds = interval_ms / 1000
             raise cv.Invalid(
