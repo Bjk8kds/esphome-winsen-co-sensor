@@ -14,7 +14,7 @@ ESPHome custom/external components for Winsen electrochemical carbon monoxide (C
 | **ZE15-CO** | 0-500 ppm | ✅ Ready | `ze15_co` |
 | **ZE07-CO** | 0-500 ppm | ✅ Ready | `ze07_co` |
 
-## 🌟 Features
+## Features
 
 - 📊 **Carbon Monoxide (CO)** measurement in ppm
 - 🔄 **Automatic mode selection** based on configuration (ZE15-CO)
