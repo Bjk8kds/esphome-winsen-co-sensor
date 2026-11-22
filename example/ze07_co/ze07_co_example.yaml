@@ -47,7 +47,7 @@ sensor:
             window_size: 10
             send_every: 10
 
-  ### Example 2: Q&A Mode - Power efficient for battery operation
+  ### Example 2: Q&A Mode
   - platform: ze07_co
     uart_id: uart_ze07
     mode: QA  # Request data only when needed
