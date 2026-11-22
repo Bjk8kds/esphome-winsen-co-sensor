@@ -175,7 +175,7 @@ sensor:
       name: "CO Level"
 ```
 
-### Power-Efficient Monitoring
+### Q&A Mode
 ```yaml
 # ZE15-CO - Q&A mode
 sensor:
